@@ -6,7 +6,9 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 // when a request is received the data is passed through those parsers before hitting the actual service.
 
-const dishRouter = require('.public/.routes/dishRouter'); //giving path to the dishRouter
+const dishRouter = require('../node-express/public/routes/dishRouter'); //giving path to the dishRouter
+const promoRouter = require('../node-express/public/routes/promoRouter');
+const leaderRouter = require('../node-express/public/routes/leaderRouter');
 const hostname = "localhost";
 const port = 3000;
 
@@ -22,34 +24,14 @@ app.use(bodyParser.json());
 app.use('/dishes', dishRouter);
 //Any request coming through the /dishes end-point will be handled by dishRouter
 
+app.use('/dishes/:dishId', dishRouter);
+//Any request coming through the /dishes/:dishId end-point will be handled by dishRouter
 
-// For the dishes/:dishId endpoint
-app.get("/dishes/:dishId", (req, res, next) => {
-  res.end("Will send details of the dish: " + req.params.dishId + " to you!");
-  //req.params is for accessing the dish Id
-});
+app.use('/promotions', promoRouter);
+app.use('/promotions/:promoId',promoRouter);
 
-app.post("/dishes/:dishId", (req, res, next) => {
-  res.statusCode = 403;
-  res.end("POST operation not supported on /dishes/" + req.params.dishId);
-  //:dishId and req.params.dishId should match correctly
-  // it doesn't make sense to do a post on a specific dish ID, because you're not trying to, add a new dish
-  
-});
-
-app.put("/dishes/:dishId", (req, res, next) => {
-  res.write("Updating the dish: " + req.params.dishId + "\n"); // used to add a reply message to the reply
-  res.end(
-    "Will update the dish: " +
-      req.body.name +
-      " with details: " +
-      req.body.description
-  );
-});
-
-app.delete("/dishes/:dishId", (req, res, next) => {
-  res.end("Deleting dish: " + req.params.dishId);
-});
+app.use('/leaders', leaderRouter);
+app.use('/leaders/:leaderId',leaderRouter);
 
 app.use(express.static(__dirname + "/public"));
 

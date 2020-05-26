@@ -40,4 +40,32 @@ dishRouter
 // but using the route method, we can actually combine these methods together
 // all these methods are chained together
 
+//---------------------------------------------------------------------------------------------------------------------
+
+// For the dishes/:dishId endpoint
+dishRouter
+  .route("/")
+  .get((req, res, next) => {
+    res.end("Will send details of the dish: " + req.params.dishId + " to you!");
+    //req.params is for accessing the dish Id
+  })
+  .post((req, res, next) => {
+    res.statusCode = 403;
+    res.end("POST operation not supported on /dishes/" + req.params.dishId);
+    //:dishId and req.params.dishId should match correctly
+    // it doesn't make sense to do a post on a specific dish ID, because you're not trying to, add a new dish
+  })
+  .put((req, res, next) => {
+    res.write("Updating the dish: " + req.params.dishId + "\n"); // used to add a reply message to the reply
+    res.end(
+      "Will update the dish: " +
+        req.body.name +
+        " with details: " +
+        req.body.description
+    );
+  })
+  .delete((req, res, next) => {
+    res.end("Deleting dish: " + req.params.dishId);
+  });
+
 module.exports = dishRouter;
