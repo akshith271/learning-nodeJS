@@ -12,14 +12,14 @@ dishRouter
     res.statusCode = 200;
     res.setHeader("Content-Type", "text/plain"); //setting the content-type to plain text
 
-    next(); //deeni tharvatha oche functions ki parameters ni modify chesi pamputhadi
+    next(); //For the forth-coming functions, next() modifies the parameters and sends them
   })
-  .get((res, req, next) => {
+  .get((req, res, next) => {
     // this app.get gets executed right after app.all because of next()
     res.end("Will send all the dishes to you!"); // res.end doesnt set any content-type
   })
 
-  .post((res, req, next) => {
+  .post((req, res, next) => {
     res.end(
       "Will add the dish: " +
       req.body.name + // req.body will give access to the info inside
@@ -44,7 +44,7 @@ dishRouter
 
 // For the dishes/:dishId endpoint
 dishRouter
-  .route("/")
+  .route("/:dishId")
   .get((req, res, next) => {
     res.end("Will send details of the dish: " + req.params.dishId + " to you!");
     //req.params is for accessing the dish Id

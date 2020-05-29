@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const promoRouter = express.Router(undefined); // To enable express promoRouter as an express Router
+const promoRouter = express.Router({}); // To enable express promoRouter as an express Router
 
 promoRouter.use(bodyParser.json());
 promoRouter
@@ -12,14 +12,15 @@ promoRouter
     res.statusCode = 200;
     res.setHeader("Content-Type", "text/plain"); //setting the content-type to plain text
 
-    next(); //deeni tharvatha oche functions ki parameters ni modify chesi pamputhadi
+    next(); //For the forth-coming functions, next() modifies the parameters and sends them
   })
-  .get((res, req, next) => {
+  .get((req, res, next) => {
     // this app.get gets executed right after app.all because of next()
     res.end("Will send all the promotions to you!"); // res.end doesnt set any content-type
   })
 
-  .post((res, req, next) => {
+  .post((req, res, next) => {
+    debugger;
     res.end(
       "Will add the promotion: " +
       req.body.name + // req.body will give access to the info inside
@@ -37,7 +38,7 @@ promoRouter
   });
 
 promoRouter
-  .route("/")
+  .route("/:promoId")
   .get((req, res, next) => {
     res.end(
       "Will send details of the promotion: " + req.params.promoId + " to you!"
@@ -46,6 +47,7 @@ promoRouter
   })
   .post((req, res, next) => {
     res.statusCode = 403;
+    debugger;
     res.end(
       "POST operation not supported on /promotions/" + req.params.promoId
     );
@@ -56,9 +58,9 @@ promoRouter
     res.write("Updating the promotion: " + req.params.promoId + "\n"); // used to add a reply message to the reply
     res.end(
       "Will update the promotion: " +
-        req.body.name +
+        req.body +
         " with details: " +
-        req.body.description
+        req.body
     );
   })
   .delete((req, res, next) => {
